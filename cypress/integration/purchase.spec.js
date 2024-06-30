@@ -1,0 +1,26 @@
+describe('Purchase suite', function(){
+    beforeEach(function(){
+        cy.visit('https://www.saucedemo.com/')
+        cy.Login('standard_user', 'secret_sauce')  
+        cy.url().should('be.equal', 'https://www.saucedemo.com/inventory.html') 
+    })
+    it.only('Verify the produc in the cart', function(){
+        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
+        cy.get('[data-test="shopping-cart-link"]').click()
+        cy.url().should('be.equal', 'https://www.saucedemo.com/cart.html')
+        cy.contains('Sauce Labs Backpack')
+    })
+    it('purchase flow', function(){
+        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click()
+        cy.get('[data-test="shopping-cart-link"]').click()
+        cy.url().should('be.equal', 'https://www.saucedemo.com/cart.html')
+        cy.contains('Sauce Labs Backpack')
+        cy.get('[data-test="checkout"]').click()
+        cy.get('[data-test="firstName"]').type('First Name')
+        cy.get('[data-test="lastName"]').type('Last Name')
+        cy.get('[data-test="postalCode"]').type('123456')
+        cy.get('[data-test="continue"]').click()
+        cy.get('[data-test="finish"]').click()
+        cy.contains('Thank you for your order!')
+    })
+})
